@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>L'Envol des Savoirs</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap');
+
+:root{
+  --cream:#FFF8EA;
+  --forest:#2F6B4F;
+  --forest-dark:#204A38;
+  --sun:#FFC64B;
+  --coral:#FF6E5C;
+  --sky:#6EC6E8;
+  --bark:#5B3E2B;
+  --violet:#8E6FC9;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{
+  margin:0; min-height:100vh; font-family:'Nunito',sans-serif;
+  background:radial-gradient(circle at 15% 10%, #eafff0 0%, transparent 45%),
+             radial-gradient(circle at 85% 90%, #fff3d6 0%, transparent 45%), var(--cream);
+  display:flex; justify-content:center;
+}
+#app{ width:100%; max-width:480px; min-height:100vh; padding:14px 14px 26px; display:flex; flex-direction:column; }
+.hidden{display:none !important;}
+button{font-family:inherit; cursor:pointer;}
+
+/* ---- header ---- */
+header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px; }
+.title{ font-family:'Baloo 2',cursive; font-weight:800; font-size:19px; color:var(--forest-dark); display:flex; align-items:center; gap:6px; }
+.header-right{ display:flex; align-items:center; gap:6px; }
+.pill{ background:white; border-radius:20px; padding:6px 12px; display:flex; align-items:center; gap:5px;
+  font-family:'Baloo 2',cursive; font-weight:700; font-size:14px; color:var(--bark); box-shadow:0 3px 0 rgba(0,0,0,0.08); border:none; }
+
+.nav-links{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+.navlink{ background:white; border:none; border-radius:14px; padding:6px 10px; font-family:'Baloo 2',cursive;
+  font-weight:700; font-size:12px; color:var(--forest-dark); box-shadow:0 2px 0 rgba(0,0,0,0.06); }
+
+/* ---- hearts ---- */
+.hearts-row{ font-size:18px; text-align:center; margin:2px 0 8px; letter-spacing:4px; }
+.hearts-row.shake{ animation:shake 0.4s; }
+
+/* ---- info pages (mission / about) ---- */
+.info-card{ background:white; border-radius:24px; padding:22px 20px; box-shadow:0 5px 0 rgba(0,0,0,0.06); }
+.info-card p{ font-size:14.5px; color:#444; line-height:1.6; margin:0 0 12px; }
+.info-card h3{ font-family:'Baloo 2',cursive; color:var(--forest-dark); font-size:16px; margin:0 0 10px; }
+
+/* ---- owl mascot (shared) ---- */
+.mascot-zone{ display:flex; align-items:flex-end; gap:10px; margin:4px 0 12px; }
+.owl{ width:64px; height:64px; flex-shrink:0; position:relative; animation:bob 3s ease-in-out infinite; }
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-4px) rotate(-2deg);}}
+.owl-body{ width:64px; height:64px; background:linear-gradient(180deg,#B08858,#8A6640); border-radius:50% 50% 46% 46%; position:relative; }
+.owl-belly{ position:absolute; width:38px; height:42px; background:#F3E3C6; border-radius:50%; left:50%; top:40%; transform:translate(-50%,0); }
+.owl-eye{ position:absolute; width:20px; height:20px; background:white; border-radius:50%; top:13px; box-shadow:0 0 0 2px #5B3E2B; }
+.owl-eye.left{left:6px;} .owl-eye.right{right:6px;}
+.owl-pupil{ position:absolute; width:8px; height:8px; background:#2b2118; border-radius:50%; top:6px; left:6px; }
+.owl-beak{ position:absolute; width:0;height:0; left:50%; top:28px; transform:translateX(-50%);
+  border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid var(--sun); }
+.owl.happy{animation:hop 0.5s ease-in-out 2;}
+@keyframes hop{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px) rotate(6deg);}}
+.owl.sad{animation:wobble 0.5s ease-in-out;}
+@keyframes wobble{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-8deg);}75%{transform:rotate(8deg);}}
+.bubble{ background:white; border-radius:14px; padding:9px 13px; font-family:'Baloo 2',cursive; font-weight:700;
+  font-size:13.5px; color:var(--forest-dark); box-shadow:0 3px 0 rgba(0,0,0,0.08); position:relative; flex:1; min-height:18px; display:flex; align-items:center; }
+.bubble:before{ content:""; position:absolute; left:-7px; bottom:12px; width:0; height:0;
+  border-top:7px solid transparent; border-bottom:7px solid transparent; border-right:8px solid white; }
+
+/* ---- onboarding ---- */
+.onboard-card{ background:white; border-radius:26px; padding:28px 22px; box-shadow:0 6px 0 rgba(0,0,0,0.07); margin-top:20px; text-align:center; }
+.onboard-card h1{ font-family:'Baloo 2',cursive; font-size:24px; color:var(--forest-dark); margin:6px 0 4px; }
+.onboard-card p{ font-size:14.5px; color:#666; margin:0 0 20px; }
+.field{ text-align:left; margin-bottom:16px; }
+.field label{ font-family:'Baloo 2',cursive; font-weight:700; font-size:14px; color:var(--bark); display:block; margin-bottom:6px; }
+.field input{ width:100%; padding:12px 14px; border-radius:14px; border:2px solid #eee; font-size:16px; font-family:'Nunito',sans-serif; }
+.field input:focus{ outline:none; border-color:var(--forest); }
+.big-btn{ width:100%; border:none; background:var(--forest); color:white; font-family:'Baloo 2',cursive; font-weight:800;
+  font-size:17px; padding:15px; border-radius:18px; box-shadow:0 4px 0 var(--forest-dark); }
+.big-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--forest-dark); }
+
+/* ---- dashboard ---- */
+.section-label{ font-family:'Baloo 2',cursive; font-weight:700; font-size:15px; color:var(--forest-dark); margin:14px 0 8px; }
+.games-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.game-card{ background:white; border-radius:20px; padding:14px 10px; text-align:center; box-shadow:0 4px 0 rgba(0,0,0,0.06); border:none; position:relative; }
+.game-card .icon{ font-size:34px; margin-bottom:6px; }
+.game-card .name{ font-family:'Baloo 2',cursive; font-weight:700; font-size:13px; color:var(--forest-dark); line-height:1.2; margin-bottom:6px; min-height:32px; display:flex; align-items:center; justify-content:center; }
+.dots{ display:flex; justify-content:center; gap:4px; margin-bottom:4px; }
+.dot{ width:8px; height:8px; border-radius:50%; background:#e2e2e2; }
+.dot.filled{ background:var(--sun); }
+.dot.mastered{ background:var(--forest); }
+.skill-tag{ font-size:10px; color:#999; }
+.bilan-btn{ margin-top:14px; }
+
+/* ---- game screen ---- */
+.game-header{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.back-btn{ border:none; background:white; border-radius:50%; width:36px; height:36px; font-size:18px; box-shadow:0 3px 0 rgba(0,0,0,0.08); flex-shrink:0; }
+.game-title{ font-family:'Baloo 2',cursive; font-weight:700; font-size:16px; color:var(--forest-dark); flex:1; }
+.level-dots{ display:flex; gap:4px; }
+.card{ background:white; border-radius:26px; padding:22px 18px 18px; box-shadow:0 6px 0 rgba(0,0,0,0.06); display:flex; flex-direction:column; align-items:center; flex:1; justify-content:center; min-height:260px; }
+.stage{ font-size:56px; margin-bottom:14px; text-align:center; line-height:1.2; }
+.stage.small-text{ font-size:22px; font-family:'Baloo 2',cursive; color:var(--forest-dark); }
+.prompt-text{ font-family:'Baloo 2',cursive; font-weight:700; font-size:16px; color:var(--forest-dark); text-align:center; margin-bottom:18px; }
+.options{ width:100%; display:flex; flex-direction:column; gap:10px; }
+.opt-btn{ border:none; background:var(--forest); color:white; font-family:'Baloo 2',cursive; font-weight:700; font-size:18px;
+  padding:14px 10px; border-radius:16px; box-shadow:0 4px 0 var(--forest-dark); }
+.opt-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--forest-dark); }
+.opt-btn.correct{ background:#3FA05A; box-shadow:0 4px 0 #2A7A3E; }
+.opt-btn.wrong{ background:var(--coral); box-shadow:0 4px 0 #C9483A; }
+.opt-btn.dim{ opacity:0.5; }
+.opt-btn.shake{ animation:shake 0.4s; }
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+.opt-btn.color-swatch{ display:flex; align-items:center; justify-content:center; height:56px; }
+.opt-btn .size-emoji{ display:block; }
+
+/* order mechanic */
+.built-zone{ min-height:56px; width:100%; background:#F5F1E6; border-radius:14px; display:flex; align-items:center; justify-content:center;
+  gap:6px; font-size:24px; margin-bottom:14px; flex-wrap:wrap; padding:8px; }
+.bank-zone{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+.token-btn{ border:none; background:var(--sky); color:white; font-family:'Baloo 2',cursive; font-weight:700; font-size:20px;
+  padding:10px 16px; border-radius:14px; box-shadow:0 3px 0 #4599B8; }
+.token-btn:active{ transform:translateY(2px); box-shadow:0 1px 0 #4599B8; }
+.token-btn.used{ opacity:0.3; pointer-events:none; }
+.clear-btn{ margin-top:10px; border:none; background:#eee; color:#777; font-weight:700; font-size:13px; padding:8px 16px; border-radius:12px; }
+
+/* story mechanic */
+.story-text{ font-size:15px; color:#333; text-align:center; margin-bottom:18px; line-height:1.5; }
+.story-btn{ border:none; background:var(--violet); color:white; font-family:'Baloo 2',cursive; font-weight:700; font-size:15px;
+  padding:14px 10px; border-radius:16px; box-shadow:0 4px 0 #6C4F9E; margin-bottom:10px; width:100%; }
+.story-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 #6C4F9E; }
+
+.burst-star{ position:absolute; font-size:26px; pointer-events:none; animation:flyUp 0.9s ease-out forwards; }
+@keyframes flyUp{0%{transform:translateY(0) scale(0.6); opacity:1;}100%{transform:translateY(-90px) scale(1.2); opacity:0;}}
+
+.levelup-banner{ position:fixed; inset:0; background:rgba(47,107,79,0.92); display:flex; flex-direction:column; align-items:center;
+  justify-content:center; color:white; text-align:center; padding:30px; z-index:20; }
+.levelup-banner h2{ font-family:'Baloo 2',cursive; font-size:28px; margin:8px 0; }
+.levelup-banner p{ font-size:15px; margin:0 0 22px; }
+
+/* bilan */
+.bilan-row{ background:white; border-radius:16px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:10px; box-shadow:0 3px 0 rgba(0,0,0,0.05); }
+.bilan-row .b-icon{ font-size:26px; }
+.bilan-row .b-info{ flex:1; }
+.bilan-row .b-name{ font-family:'Baloo 2',cursive; font-weight:700; font-size:13.5px; color:var(--forest-dark); }
+.bilan-row .b-skill{ font-size:11.5px; color:#999; }
+.bar-track{ width:100%; height:8px; background:#eee; border-radius:6px; margin-top:4px; overflow:hidden; }
+.bar-fill{ height:100%; background:var(--forest); border-radius:6px; }
+.bilan-summary{ background:white; border-radius:20px; padding:18px; margin-bottom:14px; text-align:center; box-shadow:0 4px 0 rgba(0,0,0,0.06); }
+.bilan-summary .pct{ font-family:'Baloo 2',cursive; font-weight:800; font-size:38px; color:var(--forest); }
+.bilan-summary p{ font-size:13.5px; color:#666; margin:6px 0 0; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================= DATA ============================= */
+const AGE_LABEL = {'2-5':'2 à 5 ans','5-7':'5 à 7 ans','7-10':'7 à 10 ans'};
+const LEVEL_UP_THRESHOLD = 3;
+
+function bar(num, den){
+  let s = '';
+  for(let i=0;i<den;i++) s += i < num ? '🟧' : '⬜';
+  return s;
+}
+
+const GAMES = [
+/* ---------------- 2-5 ans ---------------- */
+{ id:'couleurs', title:'Les Couleurs Magiques', icon:'🎨', ageGroup:'2-5', skill:'Couleurs', mechanic:'choice-color',
+  levels:[
+    [ {name:'ROUGE', options:[{n:'ROUGE',c:'#E74C3C'},{n:'BLEU',c:'#3498DB'},{n:'JAUNE',c:'#F1C40F'}]},
+      {name:'BLEU',  options:[{n:'BLEU',c:'#3498DB'},{n:'JAUNE',c:'#F1C40F'},{n:'ROUGE',c:'#E74C3C'}]},
+      {name:'JAUNE', options:[{n:'JAUNE',c:'#F1C40F'},{n:'ROUGE',c:'#E74C3C'},{n:'BLEU',c:'#3498DB'}]} ],
+    [ {name:'VERT',   options:[{n:'VERT',c:'#2ECC71'},{n:'ORANGE',c:'#E67E22'},{n:'VIOLET',c:'#9B59B6'}]},
+      {name:'ORANGE', options:[{n:'ORANGE',c:'#E67E22'},{n:'VIOLET',c:'#9B59B6'},{n:'VERT',c:'#2ECC71'}]},
+      {name:'VIOLET', options:[{n:'VIOLET',c:'#9B59B6'},{n:'VERT',c:'#2ECC71'},{n:'ORANGE',c:'#E67E22'}]} ],
+    [ {name:'ROSE',   options:[{n:'ROSE',c:'#FF85C0'},{n:'MARRON',c:'#8B5E34'},{n:'NOIR',c:'#2C2C2C'}]},
+      {name:'MARRON', options:[{n:'MARRON',c:'#8B5E34'},{n:'NOIR',c:'#2C2C2C'},{n:'ROSE',c:'#FF85C0'}]},
+      {name:'NOIR',   options:[{n:'NOIR',c:'#2C2C2C'},{n:'ROSE',c:'#FF85C0'},{n:'MARRON',c:'#8B5E34'}]} ]
+  ]},
+{ id:'compte', title:'Compte avec Moi', icon:'⭐', ageGroup:'2-5', skill:'Dénombrement', mechanic:'gen-count',
+  ranges:[[1,3],[3,6],[6,10]] },
+{ id:'formes', title:'Formes et Ombres', icon:'🔺', ageGroup:'2-5', skill:'Formes', mechanic:'choice',
+  levels:[
+    [ {prompt:'Montre le ROND', stage:'⚪', options:[{v:'⚪',ok:1},{v:'⬜',ok:0},{v:'🔺',ok:0}]},
+      {prompt:'Montre le CARRÉ', stage:'⬜', options:[{v:'⬜',ok:1},{v:'🔺',ok:0},{v:'⚪',ok:0}]},
+      {prompt:'Montre le TRIANGLE', stage:'🔺', options:[{v:'🔺',ok:1},{v:'⚪',ok:0},{v:'⬜',ok:0}]} ],
+    [ {prompt:'Montre l\'ÉTOILE', stage:'⭐', options:[{v:'⭐',ok:1},{v:'❤️',ok:0},{v:'🔶',ok:0}]},
+      {prompt:'Montre le CŒUR', stage:'❤️', options:[{v:'❤️',ok:1},{v:'🔶',ok:0},{v:'⭐',ok:0}]},
+      {prompt:'Montre le LOSANGE', stage:'🔶', options:[{v:'🔶',ok:1},{v:'⭐',ok:0},{v:'❤️',ok:0}]} ],
+    [ {prompt:'Montre le CERCLE VERT', stage:'🟢', options:[{v:'🟢',ok:1},{v:'🟪',ok:0},{v:'🔻',ok:0}]},
+      {prompt:'Montre le CARRÉ VIOLET', stage:'🟪', options:[{v:'🟪',ok:1},{v:'🔻',ok:0},{v:'🟢',ok:0}]},
+      {prompt:'Montre le TRIANGLE INVERSÉ', stage:'🔻', options:[{v:'🔻',ok:1},{v:'🟢',ok:0},{v:'🟪',ok:0}]} ]
+  ]},
+{ id:'zoo-sons', title:'Le Zoo des Sons', icon:'🔊', ageGroup:'2-5', skill:"Sons d'animaux", mechanic:'choice', speakStage:true,
+  levels:[
+    [ {prompt:'Quel animal fait « Meuh ! » ?', stage:'🔊', speak:'Meuh !', options:[{v:'🐄',ok:1},{v:'🐶',ok:0},{v:'🐱',ok:0}]},
+      {prompt:'Quel animal fait « Wouf ! » ?', stage:'🔊', speak:'Wouf !', options:[{v:'🐶',ok:1},{v:'🐱',ok:0},{v:'🐄',ok:0}]},
+      {prompt:'Quel animal fait « Miaou ! » ?', stage:'🔊', speak:'Miaou !', options:[{v:'🐱',ok:1},{v:'🐄',ok:0},{v:'🐶',ok:0}]} ],
+    [ {prompt:'Quel animal fait « Cocorico ! » ?', stage:'🔊', speak:'Cocorico !', options:[{v:'🐓',ok:1},{v:'🦆',ok:0},{v:'🐑',ok:0}]},
+      {prompt:'Quel animal fait « Coin coin ! » ?', stage:'🔊', speak:'Coin coin !', options:[{v:'🦆',ok:1},{v:'🐑',ok:0},{v:'🐓',ok:0}]},
+      {prompt:'Quel animal fait « Bêê ! » ?', stage:'🔊', speak:'Bêê !', options:[{v:'🐑',ok:1},{v:'🐓',ok:0},{v:'🦆',ok:0}]} ],
+    [ {prompt:'Quel animal rugit « Roooar ! » ?', stage:'🔊', speak:'Roooar !', options:[{v:'🦁',ok:1},{v:'🐷',ok:0},{v:'🐴',ok:0}]},
+      {prompt:'Quel animal fait « Groin groin ! » ?', stage:'🔊', speak:'Groin groin !', options:[{v:'🐷',ok:1},{v:'🐴',ok:0},{v:'🦁',ok:0}]},
+      {prompt:'Quel animal fait « Hi-han ! » ?', stage:'🔊', speak:'Hi-han !', options:[{v:'🐴',ok:1},{v:'🦁',ok:0},{v:'🐷',ok:0}]} ]
+  ]},
+{ id:'tailles', title:'Le Jardin des Tailles', icon:'🌳', ageGroup:'2-5', skill:'Comparaison de tailles', mechanic:'choice-size',
+  levels:[
+    [ {emoji:'🌳', ask:'grand', prompt:'Montre le PLUS GRAND'},
+      {emoji:'🎈', ask:'petit', prompt:'Montre le PLUS PETIT'},
+      {emoji:'🐟', ask:'grand', prompt:'Montre le PLUS GRAND'} ],
+    [ {emoji:'🐘', ask:'petit', prompt:'Montre le PLUS PETIT'},
+      {emoji:'🚗', ask:'grand', prompt:'Montre le PLUS GRAND'},
+      {emoji:'🏠', ask:'petit', prompt:'Montre le PLUS PETIT'} ],
+    [ {emoji:'⛰️', ask:'moyen', prompt:'Montre celui du MILIEU'},
+      {emoji:'🌟', ask:'grand', prompt:'Montre le PLUS GRAND'},
+      {emoji:'🐜', ask:'petit', prompt:'Montre le PLUS PETIT'} ]
+  ]},
+
+/* ---------------- 5-7 ans ---------------- */
+{ id:'alphabet', title:'L\'Alphabet en Chasse', icon:'🔤', ageGroup:'5-7', skill:'Lettres initiales', mechanic:'choice',
+  levels:[
+    [ {prompt:'Quel mot commence par C ?', stage:'C', options:[{v:'chat 🐱',ok:1},{v:'lion 🦁',ok:0},{v:'ours 🐻',ok:0}]},
+      {prompt:'Quel mot commence par P ?', stage:'P', options:[{v:'poule 🐔',ok:1},{v:'vache 🐄',ok:0},{v:'souris 🐭',ok:0}]},
+      {prompt:'Quel mot commence par M ?', stage:'M', options:[{v:'mouton 🐑',ok:1},{v:'canard 🦆',ok:0},{v:'tigre 🐯',ok:0}]} ],
+    [ {prompt:'Quel mot commence par B ?', stage:'B', options:[{v:'banane 🍌',ok:1},{v:'pomme 🍎',ok:0},{v:'orange 🍊',ok:0}]},
+      {prompt:'Quel mot commence par F ?', stage:'F', options:[{v:'fraise 🍓',ok:1},{v:'raisin 🍇',ok:0},{v:'citron 🍋',ok:0}]},
+      {prompt:'Quel mot commence par T ?', stage:'T', options:[{v:'train 🚂',ok:1},{v:'avion ✈️',ok:0},{v:'bateau ⛵',ok:0}]} ],
+    [ {prompt:'Quel mot commence par D ?', stage:'D', options:[{v:'dauphin 🐬',ok:1},{v:'requin 🦈',ok:0},{v:'baleine 🐳',ok:0}]},
+      {prompt:'Quel mot commence par G ?', stage:'G', options:[{v:'girafe 🦒',ok:1},{v:'zèbre 🦓',ok:0},{v:'singe 🐒',ok:0}]},
+      {prompt:'Quel mot commence par S ?', stage:'S', options:[{v:'serpent 🐍',ok:1},{v:'lézard 🦎',ok:0},{v:'grenouille 🐸',ok:0}]} ]
+  ]},
+{ id:'additions', title:'Le Marché des Additions', icon:'🍎', ageGroup:'5-7', skill:'Addition simple', mechanic:'gen-addition',
+  ranges:[[1,5],[1,10],[1,15]] },
+{ id:'syllabes', title:'Syllabes en Puzzle', icon:'🧩', ageGroup:'5-7', skill:'Découpage syllabique', mechanic:'order',
+  levels:[
+    [ {emoji:'🚗', word:'voiture', syl:['voi','ture']},
+      {emoji:'🍅', word:'tomate', syl:['to','ma','te']},
+      {emoji:'🍌', word:'banane', syl:['ba','na','ne']} ],
+    [ {emoji:'🐘', word:'éléphant', syl:['é','lé','phant']},
+      {emoji:'💻', word:'ordinateur', syl:['or','di','na','teur']},
+      {emoji:'🍫', word:'chocolat', syl:['cho','co','lat']} ],
+    [ {emoji:'🦕', word:'dinosaure', syl:['di','no','saure']},
+      {emoji:'🚁', word:'hélicoptère', syl:['hé','li','cop','tère']},
+      {emoji:'📚', word:'bibliothèque', syl:['bi','blio','thè','que']} ]
+  ]},
+{ id:'horloge', title:'L\'Horloge Curieuse', icon:'🕒', ageGroup:'5-7', skill:'Lecture de l\'heure', mechanic:'choice',
+  levels:[
+    [ {prompt:'Quelle heure est-il ?', stage:'🕐', options:[{v:'1h00',ok:1},{v:'2h00',ok:0},{v:'6h00',ok:0}]},
+      {prompt:'Quelle heure est-il ?', stage:'🕒', options:[{v:'3h00',ok:1},{v:'1h00',ok:0},{v:'9h00',ok:0}]},
+      {prompt:'Quelle heure est-il ?', stage:'🕕', options:[{v:'6h00',ok:1},{v:'3h00',ok:0},{v:'12h00',ok:0}]} ],
+    [ {prompt:'Quelle heure est-il ?', stage:'🕗', options:[{v:'8h00',ok:1},{v:'2h00',ok:0},{v:'5h00',ok:0}]},
+      {prompt:'Quelle heure est-il ?', stage:'🕙', options:[{v:'10h00',ok:1},{v:'4h00',ok:0},{v:'7h00',ok:0}]},
+      {prompt:'Quelle heure est-il ?', stage:'🕛', options:[{v:'12h00',ok:1},{v:'6h00',ok:0},{v:'9h00',ok:0}]} ],
+    [ {prompt:'Quelle heure est-il ?', stage:'🕜', options:[{v:'1h30',ok:1},{v:'1h00',ok:0},{v:'2h00',ok:0}]},
+      {prompt:'Quelle heure est-il ?', stage:'🕞', options:[{v:'3h30',ok:1},{v:'3h00',ok:0},{v:'4h00',ok:0}]},
+      {prompt:'Quelle heure est-il ?', stage:'🕡', options:[{v:'6h30',ok:1},{v:'6h00',ok:0},{v:'7h00',ok:0}]} ]
+  ]},
+{ id:'rimes', title:'Le Chemin des Rimes', icon:'🎵', ageGroup:'5-7', skill:'Rimes', mechanic:'choice',
+  levels:[
+    [ {prompt:'Quel mot rime avec CHAT ?', stage:'chat 🐱', options:[{v:'rat 🐀',ok:1},{v:'chien 🐶',ok:0},{v:'ours 🐻',ok:0}]},
+      {prompt:'Quel mot rime avec BALLON ?', stage:'ballon 🎈', options:[{v:'bonbon 🍬',ok:1},{v:'chapeau 🎩',ok:0},{v:'vélo 🚲',ok:0}]},
+      {prompt:'Quel mot rime avec FLEUR ?', stage:'fleur 🌸', options:[{v:'cœur ❤️',ok:1},{v:'soleil ☀️',ok:0},{v:'lune 🌙',ok:0}]} ],
+    [ {prompt:'Quel mot rime avec MAISON ?', stage:'maison 🏠', options:[{v:'poisson 🐟',ok:1},{v:'chapeau 🎩',ok:0},{v:'gâteau 🎂',ok:0}]},
+      {prompt:'Quel mot rime avec CABANE ?', stage:'cabane 🏚️', options:[{v:'banane 🍌',ok:1},{v:'pomme 🍎',ok:0},{v:'orange 🍊',ok:0}]},
+      {prompt:'Quel mot rime avec CHÂTEAU ?', stage:'château 🏰', options:[{v:'manteau 🧥',ok:1},{v:'pantalon 👖',ok:0},{v:'chemise 👕',ok:0}]} ],
+    [ {prompt:'Quel mot rime avec PAPILLON ?', stage:'papillon 🦋', options:[{v:'cochon 🐷',ok:1},{v:'tigre 🐯',ok:0},{v:'souris 🐭',ok:0}]},
+      {prompt:'Quel mot rime avec VOILE ?', stage:'voile ⛵', options:[{v:'étoile ⭐',ok:1},{v:'nuage ☁️',ok:0},{v:'montagne ⛰️',ok:0}]},
+      {prompt:'Quel mot rime avec TRÉSOR ?', stage:'trésor 💰', options:[{v:'dinosaure 🦕',ok:1},{v:'robot 🤖',ok:0},{v:'fusée 🚀',ok:0}]} ]
+  ]},
+
+/* ---------------- 7-10 ans ---------------- */
+{ id:'nombres', title:'Le Détective des Nombres', icon:'🔍', ageGroup:'7-10', skill:'Sens du nombre', mechanic:'gen-guess',
+  ranges:[[1,20,3],[1,50,5],[1,100,8]] },
+{ id:'monde', title:'Explorateur du Monde', icon:'🌍', ageGroup:'7-10', skill:'Géographie', mechanic:'choice',
+  levels:[
+    [ {prompt:'Sur quel continent se trouve la France ?', stage:'🇫🇷', options:[{v:'Europe',ok:1},{v:'Afrique',ok:0},{v:'Asie',ok:0}]},
+      {prompt:'Sur quel continent se trouve l\'Égypte ?', stage:'🇪🇬', options:[{v:'Afrique',ok:1},{v:'Europe',ok:0},{v:'Amérique',ok:0}]},
+      {prompt:'Sur quel continent se trouve la Chine ?', stage:'🇨🇳', options:[{v:'Asie',ok:1},{v:'Europe',ok:0},{v:'Afrique',ok:0}]} ],
+    [ {prompt:'Sur quel continent se trouve le Brésil ?', stage:'🇧🇷', options:[{v:'Amérique du Sud',ok:1},{v:'Afrique',ok:0},{v:'Asie',ok:0}]},
+      {prompt:'Sur quel continent se trouve le Kenya ?', stage:'🇰🇪', options:[{v:'Afrique',ok:1},{v:'Europe',ok:0},{v:'Océanie',ok:0}]},
+      {prompt:'Sur quel continent se trouve le Japon ?', stage:'🇯🇵', options:[{v:'Asie',ok:1},{v:'Amérique',ok:0},{v:'Europe',ok:0}]} ],
+    [ {prompt:'Sur quel continent se trouve l\'Australie ?', stage:'🇦🇺', options:[{v:'Océanie',ok:1},{v:'Asie',ok:0},{v:'Amérique',ok:0}]},
+      {prompt:'Sur quel continent se trouve le Canada ?', stage:'🇨🇦', options:[{v:'Amérique du Nord',ok:1},{v:'Europe',ok:0},{v:'Afrique',ok:0}]},
+      {prompt:'Sur quel continent se trouve le Maroc ?', stage:'🇲🇦', options:[{v:'Afrique',ok:1},{v:'Asie',ok:0},{v:'Océanie',ok:0}]} ]
+  ]},
+{ id:'sciences', title:'Le Labo des Sciences', icon:'🔬', ageGroup:'7-10', skill:'Culture scientifique', mechanic:'choice',
+  levels:[
+    [ {prompt:'D\'où vient la pluie ?', stage:'🌧️', options:[{v:'Des nuages',ok:1},{v:'Du soleil',ok:0},{v:'De la terre',ok:0}]},
+      {prompt:'Que voit-on le jour ?', stage:'☀️', options:[{v:'Le soleil',ok:1},{v:'La lune',ok:0},{v:'Les étoiles',ok:0}]},
+      {prompt:'De quoi les plantes ont-elles besoin pour grandir ?', stage:'🌱', options:[{v:'De lumière',ok:1},{v:'De chocolat',ok:0},{v:'De sable',ok:0}]} ],
+    [ {prompt:'Combien de temps met un jour sur Terre ?', stage:'🌍', options:[{v:'24 heures',ok:1},{v:'1 heure',ok:0},{v:'1 semaine',ok:0}]},
+      {prompt:'Quel organe fait circuler le sang ?', stage:'❤️', options:[{v:'Le cœur',ok:1},{v:'Le poumon',ok:0},{v:'L\'estomac',ok:0}]},
+      {prompt:'Que devient la glace en fondant ?', stage:'🧊', options:[{v:'De l\'eau',ok:1},{v:'De l\'air',ok:0},{v:'Du sable',ok:0}]} ],
+    [ {prompt:'Combien de temps met la Terre pour tourner autour du Soleil ?', stage:'🪐', options:[{v:'1 an',ok:1},{v:'1 mois',ok:0},{v:'1 jour',ok:0}]},
+      {prompt:'Quel gaz les plantes produisent-elles grâce à la lumière ?', stage:'🍃', options:[{v:'De l\'oxygène',ok:1},{v:'Du sable',ok:0},{v:'De l\'eau',ok:0}]},
+      {prompt:'Quel organe nous permet de respirer ?', stage:'🫁', options:[{v:'Les poumons',ok:1},{v:'Le foie',ok:0},{v:'Les reins',ok:0}]} ]
+  ]},
+{ id:'tables', title:'Le Grand Quiz des Tables', icon:'✖️', ageGroup:'7-10', skill:'Multiplication', mechanic:'gen-mult',
+  tablesByLevel:[[2,5,10],[3,4,6],[7,8,9]] },
+{ id:'ecriture', title:'L\'Atelier d\'Écriture Créative', icon:'✍️', ageGroup:'7-10', skill:'Créativité narrative', mechanic:'story',
+  tree:{
+    start:'step0',
+    steps:{
+      step0:{ text:'Tu ouvres la porte du grenier et trouves une vieille boîte. Que fais-tu ?',
+        options:[ {label:'Je l\'ouvre tout de suite', next:'step1a'}, {label:'Je l\'apporte à mes parents', next:'step1b'} ] },
+      step1a:{ text:'Dans la boîte, une carte au trésor brille. Où mène-t-elle ?',
+        options:[ {label:'Vers la forêt mystérieuse', next:'endA'}, {label:'Vers la plage abandonnée', next:'endB'} ] },
+      step1b:{ text:'Tes parents t\'aident à l\'ouvrir : une carte au trésor apparaît. Où allez-vous ?',
+        options:[ {label:'Vers la vieille tour', next:'endC'}, {label:'Vers la grotte secrète', next:'endD'} ] }
+    },
+    endings:{
+      endA:'Dans la forêt, tu découvres un coffre rempli de pierres précieuses scintillantes ! 🌟 Fin de l\'histoire.',
+      endB:'Sur la plage, tu trouves une bouteille avec un message d\'un autre enfant explorateur ! 🌊 Fin de l\'histoire.',
+      endC:'Dans la tour, une chouette sage te donne un livre magique rempli de secrets ! 🦉 Fin de l\'histoire.',
+      endD:'Dans la grotte, des cristaux illuminent un passage vers un monde caché ! 💎 Fin de l\'histoire.'
+    }
+  }},
+{ id:'codeur', title:'Le Codeur en Herbe', icon:'🤖', ageGroup:'7-10', skill:'Logique de programmation', mechanic:'order-code',
+  levels:[
+    [ {target:['⬆️','⬆️']}, {target:['⬆️','➡️']}, {target:['➡️','⬆️']} ],
+    [ {target:['⬆️','⬆️','➡️']}, {target:['➡️','⬆️','⬆️']}, {target:['⬆️','➡️','⬆️']} ],
+    [ {target:['⬆️','⬆️','➡️','⬆️']}, {target:['➡️','⬆️','➡️','⬆️']}, {target:['⬆️','➡️','➡️','⬆️']} ]
+  ]},
+{ id:'fractions', title:'La Machine à Fractions', icon:'🍕', ageGroup:'7-10', skill:'Fractions', mechanic:'choice',
+  levels:[
+    [ {prompt:'Quelle fraction est représentée ?', stage:bar(1,2), options:[{v:'1/2',ok:1},{v:'1/4',ok:0},{v:'3/4',ok:0}]},
+      {prompt:'Quelle fraction est représentée ?', stage:bar(1,4), options:[{v:'1/4',ok:1},{v:'1/2',ok:0},{v:'2/4',ok:0}]},
+      {prompt:'Quelle fraction est représentée ?', stage:bar(3,4), options:[{v:'3/4',ok:1},{v:'1/4',ok:0},{v:'1/2',ok:0}]} ],
+    [ {prompt:'Quelle fraction est représentée ?', stage:bar(1,3), options:[{v:'1/3',ok:1},{v:'2/3',ok:0},{v:'1/2',ok:0}]},
+      {prompt:'Quelle fraction est représentée ?', stage:bar(2,3), options:[{v:'2/3',ok:1},{v:'1/3',ok:0},{v:'3/4',ok:0}]},
+      {prompt:'Quelle fraction est représentée ?', stage:bar(2,5), options:[{v:'2/5',ok:1},{v:'1/5',ok:0},{v:'3/5',ok:0}]} ],
+    [ {prompt:'Quelle fraction équivaut à celle-ci ?', stage:bar(2,4), options:[{v:'1/2',ok:1},{v:'1/4',ok:0},{v:'3/4',ok:0}]},
+      {prompt:'Quelle fraction équivaut à celle-ci ?', stage:bar(3,6), options:[{v:'1/2',ok:1},{v:'1/3',ok:0},{v:'2/3',ok:0}]},
+      {prompt:'Quelle fraction équivaut à celle-ci ?', stage:bar(2,6), options:[{v:'1/3',ok:1},{v:'1/2',ok:0},{v:'2/3',ok:0}]} ]
+  ]},
+{ id:'temps', title:'Le Voyage dans le Temps', icon:'⏳', ageGroup:'7-10', skill:'Repérage chronologique', mechanic:'order',
+  isTimeline:true,
+  levels:[
+    [ {items:['🔥','🛞','📜','💡'], word:'ordre'},
+      {items:['🦕','🏛️','📖','💻'], word:'ordre'},
+      {items:['🐴','🚗','✈️','🚀'], word:'ordre'} ],
+    [ {items:['📜','📖','📺','📱'], word:'ordre'},
+      {items:['🕯️','💡','💻','🤖'], word:'ordre'},
+      {items:['⛵','🚢','✈️','🚀'], word:'ordre'} ],
+    [ {items:['✍️','📡','☎️','📧'], word:'ordre'},
+      {items:['🐄','🪙','💵','💳'], word:'ordre'},
+      {items:['🕯️','🏮','💡','🔆'], word:'ordre'} ]
+  ]},
+{ id:'orthographe', title:'Le Détective Orthographe', icon:'📝', ageGroup:'7-10', skill:'Orthographe', mechanic:'choice',
+  levels:[
+    [ {prompt:'« Le chien courre vite. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'chien',ok:0},{v:'courre',ok:1},{v:'vite',ok:0}]},
+      {prompt:'« Elle mange une pome rouge. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'mange',ok:0},{v:'pome',ok:1},{v:'rouge',ok:0}]},
+      {prompt:'« Il fait tres beau aujourd\'hui. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'tres',ok:1},{v:'fait',ok:0},{v:'beau',ok:0}]} ],
+    [ {prompt:'« Les enfants jouent dans la cours. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'enfants',ok:0},{v:'jouent',ok:0},{v:'cours',ok:1}]},
+      {prompt:'« Mon ami a acheter un vélo. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'ami',ok:0},{v:'acheter',ok:1},{v:'vélo',ok:0}]},
+      {prompt:'« Nous somme allés au parc. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'Nous',ok:0},{v:'somme',ok:1},{v:'parc',ok:0}]} ],
+    [ {prompt:'« Ils ont manger tout le gâteau. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'Ils',ok:0},{v:'manger',ok:1},{v:'gâteau',ok:0}]},
+      {prompt:'« Elle c\'est bien amusée à la fête. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'Elle',ok:0},{v:'c\'est',ok:1},{v:'fête',ok:0}]},
+      {prompt:'« Les chat noirs dorment sur le canapé. » Quel mot est mal écrit ?', stage:'📝', options:[{v:'chat',ok:1},{v:'noirs',ok:0},{v:'dorment',ok:0}]} ]
+  ]},
+{ id:'espace', title:'L\'Explorateur de l\'Espace', icon:'🪐', ageGroup:'7-10', skill:'Astronomie', mechanic:'choice',
+  levels:[
+    [ {prompt:'Quelle planète est la plus proche du Soleil ?', stage:'🪐', options:[{v:'Mercure',ok:1},{v:'Mars',ok:0},{v:'Jupiter',ok:0}]},
+      {prompt:'Sur quelle planète vivons-nous ?', stage:'🌍', options:[{v:'Terre',ok:1},{v:'Vénus',ok:0},{v:'Saturne',ok:0}]},
+      {prompt:'Quelle planète est surnommée « la planète rouge » ?', stage:'🔴', options:[{v:'Mars',ok:1},{v:'Neptune',ok:0},{v:'Terre',ok:0}]} ],
+    [ {prompt:'Quelle est la plus grosse planète du système solaire ?', stage:'🪐', options:[{v:'Jupiter',ok:1},{v:'Mercure',ok:0},{v:'Terre',ok:0}]},
+      {prompt:'Quelle planète a de magnifiques anneaux ?', stage:'💍', options:[{v:'Saturne',ok:1},{v:'Mars',ok:0},{v:'Vénus',ok:0}]},
+      {prompt:'Quelle planète est la plus proche de la Terre ?', stage:'🌕', options:[{v:'Vénus',ok:1},{v:'Neptune',ok:0},{v:'Uranus',ok:0}]} ],
+    [ {prompt:'Quelle est la planète la plus éloignée du Soleil ?', stage:'🪐', options:[{v:'Neptune',ok:1},{v:'Mercure',ok:0},{v:'Mars',ok:0}]},
+      {prompt:'Quelle planète est surnommée « la planète bleue » ?', stage:'🔵', options:[{v:'Terre',ok:1},{v:'Uranus',ok:0},{v:'Saturne',ok:0}]},
+      {prompt:'Combien de planètes compte notre système solaire ?', stage:'🔢', options:[{v:'8',ok:1},{v:'10',ok:0},{v:'6',ok:0}]} ]
+  ]}
+];
+
+/* ============================= STATE ============================= */
+let profile = null;
+let currentGame = null;
+let currentRound = null;
+let builtSeq = [];
+let usedTokenIdx = [];
+
+const app = document.getElementById('app');
+
+/* ============================= UTILS ============================= */
+function ageGroupFor(age){ if(age<=5) return '2-5'; if(age<=7) return '5-7'; return '7-10'; }
+
+const QUOTES_START = [
+  "Chaque grand savant a commencé petit !",
+  "Apprendre, c'est comme grandir : un pas à la fois !",
+  "Ton cerveau est un vrai super pouvoir !",
+  "Aujourd'hui est un excellent jour pour apprendre !"
+];
+const QUOTES_PROGRESS = [
+  "Tu deviens plus fort à chaque partie !",
+  "Continue, tu es sur la bonne voie !",
+  "Chaque erreur t'apprend quelque chose de nouveau !",
+  "Regarde comme tu progresses bien !"
+];
+const QUOTES_MASTER = [
+  "Tu es un vrai champion du savoir !",
+  "Quelle progression incroyable !",
+  "Tes parents seraient si fiers de te voir !",
+  "Tu voles déjà vers de nouveaux savoirs !"
+];
+function overallProgressPct(){
+  const games = GAMES.filter(g => g.ageGroup === profile.ageGroup);
+  let total = 0;
+  games.forEach(g => { const p = profile.progress[g.id]; total += p.mastered ? 3 : Math.min(p.level,3); });
+  return Math.round((total/(games.length*3))*100);
+}
+function motivationalLine(){
+  const pct = overallProgressPct();
+  const pool = pct >= 70 ? QUOTES_MASTER : (pct >= 25 ? QUOTES_PROGRESS : QUOTES_START);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function shuffle(arr){ return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]); }
+function speak(text){
+  try{ window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text); u.lang='fr-FR'; u.rate=0.9; u.pitch=1.05;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+/* ============================= AUDIO ENGINE ============================= */
+let audioCtx = null;
+function getCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function playTone(freq, start, dur, type, gainVal){
+  const ctx = getCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type || 'sine';
+  osc.frequency.value = freq;
+  osc.connect(gain); gain.connect(ctx.destination);
+  gain.gain.setValueAtTime(gainVal, start);
+  gain.gain.exponentialRampToValueAtTime(0.001, start+dur);
+  osc.start(start); osc.stop(start+dur);
+}
+function playCorrectSound(level){
+  const ctx = getCtx(); const t = ctx.currentTime;
+  const melodies = {
+    1: [523.25,659.25],
+    2: [523.25,659.25,783.99],
+    3: [523.25,659.25,783.99,1046.5],
+    4: [523.25,659.25,783.99,1046.5,1318.5]
+  };
+  const notes = melodies[level] || melodies[1];
+  notes.forEach((f,i)=> playTone(f, t+i*0.09, 0.2, 'triangle', 0.16));
+}
+function playWrongSound(){
+  const ctx = getCtx(); const t = ctx.currentTime;
+  [320,220].forEach((f,i)=> playTone(f, t+i*0.13, 0.24, 'sawtooth', 0.11));
+}
+
+const MUSIC = {
+  '2-5': { notes:[523.25,587.33,659.25,587.33,523.25,659.25,783.99,659.25], tempo:480, type:'sine' },
+  '5-7': { notes:[440.00,493.88,523.25,587.33,523.25,493.88,440.00,392.00], tempo:400, type:'triangle' },
+  '7-10':{ notes:[349.23,392.00,440.00,493.88,523.25,493.88,440.00,392.00], tempo:340, type:'triangle' }
+};
+let musicOn = false, musicInterval = null, musicStep = 0;
+function startMusic(){
+  stopMusic();
+  const conf = MUSIC[profile.ageGroup];
+  musicStep = 0;
+  musicInterval = setInterval(() => {
+    const ctx = getCtx();
+    playTone(conf.notes[musicStep % conf.notes.length], ctx.currentTime, conf.tempo/1000*0.9, conf.type, 0.05);
+    musicStep++;
+  }, conf.tempo);
+}
+function stopMusic(){ if(musicInterval) clearInterval(musicInterval); musicInterval = null; }
+function toggleMusic(){
+  musicOn = !musicOn;
+  if(musicOn) startMusic(); else stopMusic();
+  document.querySelectorAll('.music-btn').forEach(b => b.textContent = musicOn ? '🔊' : '🔈');
+}
+
+/* ============================= HEARTS ============================= */
+let hearts = 3;
+function resetHearts(){ hearts = 3; renderHearts(); }
+function renderHearts(){
+  const el = document.getElementById('heartsRow');
+  if(!el) return;
+  el.textContent = Array.from({length:3}, (_,i) => i < hearts ? '❤️' : '🤍').join(' ');
+}
+function loseHeart(){
+  if(hearts <= 0) return;
+  hearts--;
+  renderHearts();
+  const el = document.getElementById('heartsRow');
+  if(el){ el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'), 400); }
+  if(hearts <= 0){
+    const zone = document.getElementById('cardZone');
+    if(zone) zone.dataset.locked = '1';
+    const prog = profile.progress[currentGame.id];
+    prog.correctAtLevel = 0;
+    saveProfile();
+    setTimeout(() => {
+      showLevelUpBanner('Niveau à refaire ! 💪', `Plus de cœurs ! On reprend le niveau ${prog.level} depuis le début, tu vas y arriver !`,
+        () => { resetHearts(); renderGameShell(); nextRound(); });
+    }, 500);
+  }
+}
+
+/* ============================= PERSISTENCE ============================= */
+async function saveProfile(){
+  try{ await window.storage.set('profile:'+profile.name, JSON.stringify(profile), false); }catch(e){}
+}
+async function loadLastProfile(){
+  try{
+    const last = await window.storage.get('last-profile', false);
+    if(!last) return null;
+    const p = await window.storage.get('profile:'+last.value, false);
+    return p ? JSON.parse(p.value) : null;
+  }catch(e){ return null; }
+}
+async function setLastProfile(name){
+  try{ await window.storage.set('last-profile', name, false); }catch(e){}
+}
+
+function emptyProgress(){
+  const prog = {};
+  GAMES.forEach(g => prog[g.id] = { level:1, correctAtLevel:0, mastered:false, storyDone:false });
+  return prog;
+}
+
+/* ============================= RENDER: ONBOARDING ============================= */
+function renderOnboarding(){
+  app.innerHTML = `
+    <div class="title">🌳 La Forêt des Savoirs</div>
+    <div class="onboard-card">
+      <div style="font-size:44px;">🦉</div>
+      <h1>Bienvenue !</h1>
+      <p>Dis-moi qui tu es pour que je te propose les bons jeux.</p>
+      <div class="field">
+        <label>Prénom de l'enfant</label>
+        <input type="text" id="inName" placeholder="Ex: Emma" maxlength="30">
+        <div id="nameError" style="color:#E74C3C; font-size:12.5px; margin-top:5px; display:none;">Le prénom ne doit contenir que des lettres (2 à 30 caractères, sans chiffre ni symbole).</div>
+      </div>
+      <div class="field">
+        <label>Âge</label>
+        <input type="number" id="inAge" min="2" max="10" placeholder="Ex: 6">
+      </div>
+      <button class="big-btn" id="startBtn">Commencer l'aventure</button>
+    </div>
+  `;
+  const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,30}$/;
+  const inName = document.getElementById('inName');
+  const nameError = document.getElementById('nameError');
+  inName.addEventListener('input', () => {
+    inName.value = inName.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ' -]/g, '');
+    nameError.style.display = 'none';
+  });
+  document.getElementById('startBtn').addEventListener('click', async () => {
+    const name = inName.value.trim();
+    if(!nameRegex.test(name)){ nameError.style.display = 'block'; return; }
+    let age = parseInt(document.getElementById('inAge').value, 10);
+    if(isNaN(age)) age = 5;
+    age = Math.max(2, Math.min(10, age));
+
+    let existing = null;
+    try{
+      const p = await window.storage.get('profile:'+name, false);
+      if(p) existing = JSON.parse(p.value);
+    }catch(e){}
+
+    profile = existing || { name, age, ageGroup: ageGroupFor(age), progress: emptyProgress() };
+    profile.age = age;
+    profile.ageGroup = ageGroupFor(age);
+    await saveProfile();
+    await setLastProfile(name);
+    renderDashboard();
+  });
+}
+
+/* ============================= RENDER: DASHBOARD ============================= */
+function renderDashboard(){
+  const games = GAMES.filter(g => g.ageGroup === profile.ageGroup);
+  app.innerHTML = `
+    <header>
+      <div class="title">🦉 L'Envol des Savoirs</div>
+      <div class="header-right">
+        <button class="pill music-btn" id="musicBtn">${musicOn ? '🔊' : '🔈'}</button>
+      </div>
+    </header>
+    <div class="nav-links">
+      <button class="navlink" id="switchBtn">👤 ${profile.name}</button>
+      <button class="navlink" id="missionBtn">🎯 Objectif</button>
+      <button class="navlink" id="aboutBtn">✍️ Auteur</button>
+    </div>
+    <div class="mascot-zone">
+      <div class="owl"><div class="owl-body"><div class="owl-belly"></div>
+        <div class="owl-eye left"><div class="owl-pupil"></div></div>
+        <div class="owl-eye right"><div class="owl-pupil"></div></div>
+        <div class="owl-beak"></div></div>
+      </div>
+      <div class="bubble">Bienvenue ${profile.name} ! 🌟 ${motivationalLine()}</div>
+    </div>
+    <div class="section-label">Tes jeux</div>
+    <div class="games-grid" id="grid"></div>
+    <button class="big-btn bilan-btn" id="bilanBtn">📊 Mon bilan</button>
+  `;
+  const grid = document.getElementById('grid');
+  games.forEach(g => {
+    const prog = profile.progress[g.id];
+    const lvl = prog.mastered ? 3 : prog.level;
+    let dotsHtml = '';
+    for(let i=1;i<=3;i++){
+      const cls = prog.mastered ? 'dot mastered' : (i <= (prog.level-1) || (i===prog.level && prog.correctAtLevel>=LEVEL_UP_THRESHOLD) ? 'dot filled' : (i===prog.level?'dot filled':'dot'));
+      dotsHtml += `<div class="${i < prog.level || prog.mastered ? 'dot mastered' : (i===prog.level?'dot filled':'dot')}"></div>`;
+    }
+    const card = document.createElement('button');
+    card.className = 'game-card';
+    card.innerHTML = `
+      <div class="icon">${g.icon}</div>
+      <div class="name">${g.title}</div>
+      <div class="dots">${dotsHtml}</div>
+      <div class="skill-tag">${prog.mastered ? 'Maîtrisé ⭐' : 'Niveau '+prog.level+'/3'}</div>
+    `;
+    card.addEventListener('click', () => openGame(g.id));
+    grid.appendChild(card);
+  });
+  document.getElementById('switchBtn').addEventListener('click', renderOnboarding);
+  document.getElementById('bilanBtn').addEventListener('click', renderBilan);
+  document.getElementById('missionBtn').addEventListener('click', renderMission);
+  document.getElementById('aboutBtn').addEventListener('click', renderAbout);
+  document.getElementById('musicBtn').addEventListener('click', toggleMusic);
+}
+
+/* ============================= INFO PAGES ============================= */
+function renderMission(){
+  app.innerHTML = `
+    <div class="game-header">
+      <button class="back-btn" id="backBtn">←</button>
+      <div class="game-title">🎯 Notre objectif</div>
+    </div>
+    <div class="info-card">
+      <div style="font-size:44px; text-align:center; margin-bottom:10px;">🦉</div>
+      <h3>Pourquoi L'Envol des Savoirs ?</h3>
+      <p>Trop d'enfants associent l'apprentissage à l'ennui ou à la pression scolaire. L'Envol des Savoirs part d'une conviction simple : un enfant apprend mieux quand il s'amuse, qu'il avance à son propre rythme, et qu'il se sent fier de ses progrès plutôt que jugé sur ses erreurs.</p>
+      <h3>Comment ça marche ?</h3>
+      <p>L'application s'adapte automatiquement à l'âge de l'enfant (2 à 5 ans, 5 à 7 ans, ou 7 à 10 ans) et propose des jeux courts couvrant la lecture, le calcul, la logique, les sciences et la culture générale. Chaque jeu compte 3 niveaux : l'enfant progresse en réussissant des bonnes réponses, et peut rejouer autant de fois qu'il le souhaite pour consolider ce qu'il apprend.</p>
+      <h3>Le droit à l'erreur</h3>
+      <p>Le système des cœurs permet à l'enfant de se tromper sans crainte : perdre ses trois cœurs signifie simplement recommencer le niveau avec le sourire, pas un échec. L'objectif n'est jamais la performance, mais la persévérance.</p>
+      <h3>Un bilan pour avancer</h3>
+      <p>À tout moment, un bilan visuel permet à l'enfant (et à ses parents) de voir où il en est dans chaque domaine, pour célébrer les réussites et savoir où continuer à s'entraîner.</p>
+      <h3>Pour qui ?</h3>
+      <p>Pour tous les enfants de 2 à 10 ans, à la maison comme en complément de l'école, et pour tous les parents qui veulent offrir à leur enfant un moment d'apprentissage aussi joyeux qu'un moment de jeu.</p>
+    </div>
+  `;
+  document.getElementById('backBtn').addEventListener('click', renderDashboard);
+}
+
+function renderAbout(){
+  app.innerHTML = `
+    <div class="game-header">
+      <button class="back-btn" id="backBtn">←</button>
+      <div class="game-title">✍️ À propos de l'auteur</div>
+    </div>
+    <div class="info-card">
+      <img src="data:image/jpeg;base64,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" style="width:110px; height:110px; border-radius:50%; object-fit:cover; margin:0 auto 14px; display:block; border:4px solid var(--forest); box-shadow:0 4px 0 rgba(0,0,0,0.08);" id="authorPhoto" alt="Photo de Chérif">
+      <h3 style="text-align:center;">Chérif</h3>
+      <p style="text-align:center; color:#999; font-size:13px; margin-top:-8px;">Créateur de L'Envol des Savoirs</p>
+      <p>Chérif est Technicien en Sécurité des Systèmes et Réseaux Informatiques, actuellement en stage chez Digigle Solution, une entreprise canadienne spécialisée dans l'intelligence artificielle et l'automatisation, en partenariat avec Pont Numérique. Il a auparavant réalisé des stages en cybersécurité et réseaux à la Mairie de Parakou et à la Préfecture de Parakou, au Bénin.</p>
+      <p>Passionné par l'automatisation no-code (HubSpot, Zapier, Make) et par l'intelligence artificielle appliquée (Claude AI, Claude Code), il conçoit des outils qui simplifient le quotidien professionnel autant que l'apprentissage des enfants.</p>
+      <p>L'Envol des Savoirs est né d'une envie simple : mettre ses compétences techniques au service de quelque chose d'utile et de joyeux — donner à chaque enfant, où qu'il soit, un espace pour apprendre en s'amusant.</p>
+    </div>
+  `;
+  document.getElementById('backBtn').addEventListener('click', renderDashboard);
+}
+
+/* ============================= GAME ENGINE ============================= */
+function openGame(id){
+  currentGame = GAMES.find(g => g.id === id);
+  builtSeq = []; usedTokenIdx = [];
+  if(currentGame.mechanic === 'story'){
+    currentGame._storyKey = currentGame.tree.start;
+    renderStoryScreen();
+  } else {
+    hearts = 3;
+    renderGameShell();
+    nextRound();
+  }
+}
+
+function renderGameShell(){
+  const prog = profile.progress[currentGame.id];
+  let dotsHtml='';
+  for(let i=1;i<=3;i++) dotsHtml += `<div class="dot ${i<prog.level||prog.mastered?'mastered':(i===prog.level?'filled':'')}"></div>`;
+  app.innerHTML = `
+    <div class="game-header">
+      <button class="back-btn" id="backBtn">←</button>
+      <div class="game-title">${currentGame.icon} ${currentGame.title}</div>
+      <div class="level-dots">${dotsHtml}</div>
+      <button class="pill music-btn" id="musicBtn" style="padding:6px 8px;">${musicOn ? '🔊' : '🔈'}</button>
+    </div>
+    <div class="hearts-row" id="heartsRow"></div>
+    <div class="card" id="cardZone"></div>
+  `;
+  document.getElementById('backBtn').addEventListener('click', renderDashboard);
+  document.getElementById('musicBtn').addEventListener('click', toggleMusic);
+  renderHearts();
+}
+
+function currentLevelIndex(){
+  const prog = profile.progress[currentGame.id];
+  return Math.min(prog.level, 3) - 1;
+}
+
+function nextRound(){
+  const g = currentGame;
+  const li = currentLevelIndex();
+
+  if(g.mechanic === 'choice' || g.mechanic === 'choice-color' || g.mechanic === 'choice-size'){
+    const pool = g.levels[li];
+    currentRound = pool[Math.floor(Math.random()*pool.length)];
+    renderChoiceRound();
+  } else if(g.mechanic === 'gen-count'){
+    const [mn,mx] = g.ranges[li];
+    const n = randInt(mn,mx);
+    let d1 = n, d2 = n;
+    while(d1===n) d1 = Math.max(1, n + (Math.random()<0.5?-1:1)*randInt(1,2));
+    while(d2===n || d2===d1) d2 = Math.max(1, n + (Math.random()<0.5?-2:2)*randInt(1,2));
+    currentRound = { prompt:'Combien vois-tu d\'étoiles ?', stage:'⭐'.repeat(n),
+      options: shuffle([{v:String(n),ok:1},{v:String(d1),ok:0},{v:String(d2),ok:0}]) };
+    renderChoiceRound();
+  } else if(g.mechanic === 'gen-addition'){
+    const [mn,mx] = g.ranges[li];
+    const a = randInt(mn,mx), b = randInt(mn,mx), sum = a+b;
+    let d1 = sum+randInt(1,3), d2 = Math.max(0,sum-randInt(1,3));
+    if(d2===sum) d2 = sum+4;
+    const stage = mx<=5 ? '🍎'.repeat(a)+' + '+'🍎'.repeat(b) : (a+' + '+b);
+    currentRound = { prompt:'Combien cela fait-il en tout ?', stage,
+      options: shuffle([{v:String(sum),ok:1},{v:String(d1),ok:0},{v:String(d2),ok:0}]) };
+    renderChoiceRound();
+  } else if(g.mechanic === 'gen-mult'){
+    const tables = g.tablesByLevel[li];
+    const b = tables[randInt(0,tables.length-1)];
+    const a = randInt(1,10);
+    const correct = a*b;
+    let d1 = correct + b, d2 = Math.max(0, correct - b);
+    if(d2===correct) d2 = correct + b*2;
+    currentRound = { prompt:`${a} × ${b} = ?`, stage:'✖️',
+      options: shuffle([{v:String(correct),ok:1},{v:String(d1),ok:0},{v:String(d2),ok:0}]) };
+    renderChoiceRound();
+  } else if(g.mechanic === 'gen-guess'){
+    const [mn,mx,win] = g.ranges[li];
+    const secret = randInt(mn,mx);
+    const lo = Math.max(mn, secret-win), hi = Math.min(mx, secret+win);
+    let d1 = secret+1 > mx ? secret-1 : secret+1;
+    let d2 = secret-2 < mn ? secret+2 : secret-2;
+    if(d2===d1) d2 = secret+3<=mx?secret+3:secret-3;
+    currentRound = { prompt:`Je pense à un nombre entre ${lo} et ${hi}. Lequel est-ce ?`, stage:'🔍',
+      options: shuffle([{v:String(secret),ok:1},{v:String(d1),ok:0},{v:String(d2),ok:0}]) };
+    renderChoiceRound();
+  } else if(g.mechanic === 'order'){
+    const pool = g.levels[li];
+    currentRound = pool[Math.floor(Math.random()*pool.length)];
+    builtSeq = []; usedTokenIdx = [];
+    renderOrderRound();
+  } else if(g.mechanic === 'order-code'){
+    const pool = g.levels[li];
+    currentRound = pool[Math.floor(Math.random()*pool.length)];
+    builtSeq = []; usedTokenIdx = [];
+    renderCodeRound();
+  }
+}
+
+/* ---- choice rendering ---- */
+function renderChoiceRound(){
+  const zone = document.getElementById('cardZone');
+  const g = currentGame, r = currentRound;
+
+  if(g.mechanic === 'choice-color'){
+    zone.innerHTML = `
+      <div class="stage">🎨</div>
+      <div class="prompt-text">Trouve le ${r.name}</div>
+      <div class="options" id="optsZone"></div>
+    `;
+    const optsZone = document.getElementById('optsZone');
+    shuffle(r.options).forEach(o => {
+      const b = document.createElement('button');
+      b.className = 'opt-btn color-swatch';
+      b.style.background = o.c;
+      b.addEventListener('click', () => handleChoice(b, o.n === r.name));
+      optsZone.appendChild(b);
+    });
+    return;
+  }
+
+  if(g.mechanic === 'choice-size'){
+    const sizes = shuffle([36,60,96]);
+    const targetIdx = {petit:0, moyen:1, grand:2}[r.ask];
+    zone.innerHTML = `
+      <div class="stage">${r.emoji}</div>
+      <div class="prompt-text">${r.prompt}</div>
+      <div class="options" id="optsZone" style="flex-direction:row; justify-content:space-around; align-items:flex-end;"></div>
+    `;
+    const optsZone = document.getElementById('optsZone');
+    sizes.forEach(sz => {
+      const b = document.createElement('button');
+      b.className = 'opt-btn';
+      b.style.background = 'white';
+      b.style.boxShadow = '0 3px 0 rgba(0,0,0,0.08)';
+      b.innerHTML = `<span class="size-emoji" style="font-size:${sz}px;">${r.emoji}</span>`;
+      b.addEventListener('click', () => handleChoice(b, sz === sizes[targetIdx]));
+      optsZone.appendChild(b);
+    });
+    return;
+  }
+
+  // generic choice
+  const stageClass = /^[0-9🟧⬜/]+$/.test(r.stage||'') && r.stage && r.stage.length>4 ? 'stage small-text' : 'stage';
+  zone.innerHTML = `
+    <div class="${stageClass}">${r.stage||''}</div>
+    <div class="prompt-text">${r.prompt}</div>
+    <div class="options" id="optsZone"></div>
+  `;
+  if(g.speakStage && r.speak) setTimeout(()=>speak(r.speak), 300);
+  const optsZone = document.getElementById('optsZone');
+  shuffle(r.options).forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = o.v;
+    b.addEventListener('click', () => handleChoice(b, !!o.ok));
+    optsZone.appendChild(b);
+  });
+}
+
+function handleChoice(btn, isCorrect){
+  const zone = document.getElementById('cardZone');
+  if(zone.dataset.locked) return;
+  if(isCorrect){
+    zone.dataset.locked = '1';
+    btn.classList.add('correct');
+    document.querySelectorAll('.opt-btn').forEach(b=>{ if(b!==btn) b.classList.add('dim'); });
+    burst(zone);
+    onCorrect();
+  } else {
+    btn.classList.add('wrong','shake');
+    playWrongSound();
+    loseHeart();
+    setTimeout(()=> btn.classList.remove('wrong','shake'), 450);
+  }
+}
+
+/* ---- order rendering (syllables / timeline) ---- */
+function renderOrderRound(){
+  const zone = document.getElementById('cardZone');
+  const g = currentGame, r = currentRound;
+  const items = g.isTimeline ? r.items : r.syl;
+  const shuffled = shuffle(items.map((v,i)=>({v,i})));
+  const promptText = g.isTimeline ? 'Remets ces évènements dans l\'ordre (du plus ancien au plus récent)'
+                                  : `Reconstitue le mot : ${r.word}`;
+  zone.innerHTML = `
+    ${g.isTimeline ? '' : `<div class="stage">${r.emoji}</div>`}
+    <div class="prompt-text">${promptText}</div>
+    <div class="built-zone" id="builtZone"></div>
+    <div class="bank-zone" id="bankZone"></div>
+    <button class="clear-btn" id="clearBtn">Recommencer</button>
+  `;
+  const bank = document.getElementById('bankZone');
+  shuffled.forEach((item, idx) => {
+    const b = document.createElement('button');
+    b.className = 'token-btn';
+    b.textContent = item.v;
+    b.dataset.origIdx = item.i;
+    b.dataset.bankIdx = idx;
+    b.addEventListener('click', () => handleOrderTap(b, item.i, items));
+    bank.appendChild(b);
+  });
+  document.getElementById('clearBtn').addEventListener('click', () => { builtSeq=[]; usedTokenIdx=[]; renderOrderRound(); });
+  renderBuiltZone();
+}
+
+function renderBuiltZone(){
+  const bz = document.getElementById('builtZone');
+  bz.textContent = builtSeq.length ? builtSeq.join(g_isSyllable() ? '' : ' → ') : '...';
+}
+function g_isSyllable(){ return currentGame.mechanic==='order' && !currentGame.isTimeline; }
+
+function handleOrderTap(btn, origIdx, items){
+  const zone = document.getElementById('cardZone');
+  if(zone.dataset.locked) return;
+  const expectedIdx = builtSeq.length;
+  if(origIdx === expectedIdx){
+    builtSeq.push(items[origIdx]);
+    btn.classList.add('used');
+    renderBuiltZone();
+    if(builtSeq.length === items.length){
+      zone.dataset.locked = '1';
+      burst(zone);
+      onCorrect();
+    }
+  } else {
+    btn.classList.add('shake');
+    playWrongSound();
+    loseHeart();
+    setTimeout(()=>btn.classList.remove('shake'), 400);
+  }
+}
+
+/* ---- order-code rendering (codeur en herbe) ---- */
+function renderCodeRound(){
+  const zone = document.getElementById('cardZone');
+  const r = currentRound;
+  const blocks = ['⬆️','➡️','⬅️'];
+  zone.innerHTML = `
+    <div class="stage">🤖 → 🍎</div>
+    <div class="prompt-text">Compose le chemin du robot jusqu'à la pomme</div>
+    <div class="built-zone" id="builtZone">...</div>
+    <div class="bank-zone" id="bankZone"></div>
+    <button class="clear-btn" id="clearBtn">Recommencer</button>
+  `;
+  const bank = document.getElementById('bankZone');
+  blocks.forEach(sym => {
+    const b = document.createElement('button');
+    b.className = 'token-btn';
+    b.textContent = sym;
+    b.addEventListener('click', () => handleCodeTap(sym, r.target));
+    bank.appendChild(b);
+  });
+  document.getElementById('clearBtn').addEventListener('click', () => { builtSeq=[]; renderCodeRound(); });
+}
+
+function handleCodeTap(sym, target){
+  const zone = document.getElementById('cardZone');
+  if(zone.dataset.locked) return;
+  const expected = target[builtSeq.length];
+  if(sym === expected){
+    builtSeq.push(sym);
+    document.getElementById('builtZone').textContent = builtSeq.join(' ');
+    if(builtSeq.length === target.length){
+      zone.dataset.locked = '1';
+      burst(zone);
+      onCorrect();
+    }
+  } else {
+    document.getElementById('builtZone').classList.add('shake');
+    playWrongSound();
+    loseHeart();
+    setTimeout(()=>document.getElementById('builtZone').classList.remove('shake'), 400);
+  }
+}
+
+/* ---- story rendering ---- */
+function renderStoryScreen(){
+  const g = currentGame;
+  const key = g._storyKey;
+  const isEnding = !!g.tree.endings[key];
+  app.innerHTML = `
+    <div class="game-header">
+      <button class="back-btn" id="backBtn">←</button>
+      <div class="game-title">${g.icon} ${g.title}</div>
+    </div>
+    <div class="card" id="cardZone">
+      <div class="stage">${isEnding ? '🎉' : '📖'}</div>
+      <div class="story-text">${isEnding ? g.tree.endings[key] : g.tree.steps[key].text}</div>
+      <div id="storyOpts"></div>
+    </div>
+  `;
+  document.getElementById('backBtn').addEventListener('click', renderDashboard);
+  const optsZone = document.getElementById('storyOpts');
+  if(isEnding){
+    const prog = profile.progress[g.id];
+    if(!prog.storyDone){ prog.storyDone = true; prog.mastered = true; prog.level = 3; saveProfile(); }
+    const btn = document.createElement('button');
+    btn.className = 'story-btn';
+    btn.textContent = 'Recommencer l\'histoire';
+    btn.addEventListener('click', () => { g._storyKey = g.tree.start; renderStoryScreen(); });
+    optsZone.appendChild(btn);
+  } else {
+    g.tree.steps[key].options.forEach(o => {
+      const btn = document.createElement('button');
+      btn.className = 'story-btn';
+      btn.textContent = o.label;
+      btn.addEventListener('click', () => { g._storyKey = o.next; renderStoryScreen(); });
+      optsZone.appendChild(btn);
+    });
+  }
+}
+
+/* ---- shared: correct answer / level progression ---- */
+function burst(zone){
+  for(let i=0;i<5;i++){
+    const s = document.createElement('div');
+    s.className = 'burst-star'; s.textContent = '⭐';
+    s.style.left = (40+Math.random()*20)+'%'; s.style.top = (30+Math.random()*10)+'%';
+    s.style.animationDelay = (i*0.05)+'s';
+    zone.style.position = 'relative';
+    zone.appendChild(s);
+    setTimeout(()=>s.remove(), 1000);
+  }
+}
+
+function onCorrect(){
+  const prog = profile.progress[currentGame.id];
+  playCorrectSound(prog.mastered ? 4 : prog.level);
+  speak('Bravo !');
+  prog.correctAtLevel++;
+  let leveledUp = false, justMastered = false;
+  if(prog.correctAtLevel >= LEVEL_UP_THRESHOLD){
+    if(prog.level < 3){ prog.level++; prog.correctAtLevel = 0; leveledUp = true; }
+    else if(!prog.mastered){ prog.mastered = true; justMastered = true; }
+  }
+  saveProfile();
+  setTimeout(() => {
+    if(justMastered) showLevelUpBanner('Jeu maîtrisé ! 🏆', `Tu maîtrises « ${currentGame.title} » !`, () => renderDashboard());
+    else if(leveledUp) showLevelUpBanner('Niveau supérieur ! 🎉', `Tu passes au niveau ${prog.level} !`, () => { resetHearts(); renderGameShell(); nextRound(); });
+    else { renderGameShell(); nextRound(); }
+  }, 900);
+}
+
+function showLevelUpBanner(title, msg, onContinue){
+  const b = document.createElement('div');
+  b.className = 'levelup-banner';
+  b.innerHTML = `<div style="font-size:56px;">🎊</div><h2>${title}</h2><p>${msg}</p><button class="big-btn" id="contBtn" style="width:auto; padding:14px 34px;">Continuer</button>`;
+  document.body.appendChild(b);
+  document.getElementById('contBtn').addEventListener('click', () => { b.remove(); onContinue(); });
+}
+
+/* ============================= BILAN ============================= */
+function renderBilan(){
+  const games = GAMES.filter(g => g.ageGroup === profile.ageGroup);
+  let totalLevel = 0;
+  const rows = games.map(g => {
+    const prog = profile.progress[g.id];
+    const lvl = prog.mastered ? 3 : (prog.level - (prog.correctAtLevel>0?0:0));
+    totalLevel += Math.min(lvl,3);
+    const pct = Math.round((Math.min(lvl,3)/3)*100);
+    return `
+      <div class="bilan-row">
+        <div class="b-icon">${g.icon}</div>
+        <div class="b-info">
+          <div class="b-name">${g.title}</div>
+          <div class="b-skill">${g.skill}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%;"></div></div>
+        </div>
+      </div>`;
+  }).join('');
+  const overallPct = Math.round((totalLevel/(games.length*3))*100);
+  let msg = 'Continue à explorer les jeux pour progresser !';
+  if(overallPct >= 80) msg = `${profile.name} maîtrise très bien cette tranche d'âge, bravo !`;
+  else if(overallPct >= 40) msg = `${profile.name} progresse bien, encore un peu d'entraînement !`;
+  app.innerHTML = `
+    <div class="game-header">
+      <button class="back-btn" id="backBtn">←</button>
+      <div class="game-title">📊 Bilan de ${profile.name}</div>
+    </div>
+    <div class="bilan-summary">
+      <div class="pct">${overallPct}%</div>
+      <p>${msg}</p>
+    </div>
+    <div class="section-label">Détail par jeu</div>
+    ${rows}
+  `;
+  document.getElementById('backBtn').addEventListener('click', renderDashboard);
+}
+
+/* ============================= BOOT ============================= */
+(async function boot(){
+  const last = await loadLastProfile();
+  if(last){ profile = last; renderDashboard(); }
+  else { renderOnboarding(); }
+})();
+</script>
+</body>
+</html>
